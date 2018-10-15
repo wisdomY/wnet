@@ -28,11 +28,7 @@ if (UNIX)
                          ${PROJECT_SOURCE_DIR}/libs/evpp
                          ${PROJECT_SOURCE_DIR}/libs/boost/boost_1_67_0/boost
                          ${PROJECT_SOURCE_DIR}/libs/protobuf
-                         ${PROJECT_SOURCE_DIR}/libs/websocketpp
-                         ${PROJECT_SOURCE_DIR}/common
-                         ${PROJECT_SOURCE_DIR}/gateway
-                         ${PROJECT_SOURCE_DIR}/gateway/serialport
-                         ${PROJECT_SOURCE_DIR}/gateway/websocketserver)
+                         ${PROJECT_SOURCE_DIR}/common)
 else (UNIX)
 set (CXX_FLAGS -DWIN32 -D_WIN32 -DTIXML_USE_STL -EHsc -D_X86_)
     set(VcpkgRoot ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET})
@@ -41,11 +37,7 @@ set (CXX_FLAGS -DWIN32 -D_WIN32 -DTIXML_USE_STL -EHsc -D_X86_)
                         ${PROJECT_SOURCE_DIR}/libs/evpp
                         ${PROJECT_SOURCE_DIR}/libs/boost/boost_1_67_0/boost
                         ${PROJECT_SOURCE_DIR}/libs/protobuf
-                        ${PROJECT_SOURCE_DIR}/libs/websocketpp
-                        ${PROJECT_SOURCE_DIR}/common
-                        ${PROJECT_SOURCE_DIR}/gateway
-                        ${PROJECT_SOURCE_DIR}/gateway/serialport
-                        ${PROJECT_SOURCE_DIR}/gateway/websocketserver)
+                        ${PROJECT_SOURCE_DIR}/common)
 	
     # On windows, Debug mode
     link_directories(${VcpkgRoot}/debug/lib ${VcpkgRoot}/debug/lib/manual-link)
@@ -81,7 +73,8 @@ file(GLOB app_SRCS *.cpp *.cc *.h)
 set(app_SRCS ${app_SRCS})
 message(STATUS "app_SRCS : " ${app_SRCS})
 
-SET(DEPENDENT_LIBRARIES glog evpp_static libprotobuf net_static sys_static gateway_static )
+#SET(DEPENDENT_LIBRARIES glog evpp_static libprotobuf net_static sys_static gateway_static )
+SET(DEPENDENT_LIBRARIES glog evpp_static libprotobuf net_static sys_static )
 
 set (MACOSX_RPATH ${LIBRARY_OUTPUT_PATH})
 

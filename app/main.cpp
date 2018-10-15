@@ -4,6 +4,7 @@
 #include "MiniDumper.h"
 #endif
 #include <stdio.h>
+#include "app_manager.h"
 
 int main(int argc, char * argv[] ) {
 #ifdef WIN32
@@ -16,7 +17,7 @@ int main(int argc, char * argv[] ) {
 #endif
 
     uint32_t threadNum = 4;
-    CAppManager app();
+    CAppManager app;
     
     if (!app.Init()) {
         std::cout << "CLightControlApp Init failed." << std::endl;
