@@ -55,6 +55,13 @@ void ClientSession::Connect(const ClientConnectionCallback& cb) {
     tcp_client_.Connect();
 }
 
+void ClientSession::SetAutoReconnect(evpp::Duration duration)
+{
+    tcp_client_.set_reconnect_interval(duration);
+    tcp_client_.set_auto_reconnect(true);
+}
+
+
 void ClientSession::OnConnection(const evpp::TCPConnPtr& conn) {
     if (conn->IsConnected()) {
         DLOG_TRACE << "Tcp client session setup fd:" << conn->fd() << " id:" << conn->id();
@@ -64,6 +71,7 @@ void ClientSession::OnConnection(const evpp::TCPConnPtr& conn) {
         client_conn_cb_(this);
     } else {
         DLOG_TRACE << "Tcp client session destroyed id:" << conn->id();
+        client_conn_cb_(this);//断连也需要调用回调，回调到业务层处理
     }
 }
 

@@ -18,8 +18,8 @@ class ClientSession;
 typedef std::function<void(ClientSession*)> ClientConnectionCallback;
 inline void DefaultClientConnectionCallback(ClientSession*) {}
 
-class ClientSession {
-
+class ClientSession
+{
 public:
     ClientSession(evpp::EventLoop* loop,
                   IPacketStreamer* streamer,
@@ -27,7 +27,7 @@ public:
                   const std::string& name);
     virtual ~ClientSession();
 
-    void SetDefaultPacketHandler(IPacketHandler *ph)
+    void SetDefaultPacketHandler(IPacketHandler* ph)
     {
         defaultPacketHandler_ = ph;
     }
@@ -38,6 +38,7 @@ public:
 
     void Connect();
     void Connect(const ClientConnectionCallback& cb);
+    void SetAutoReconnect(evpp::Duration duration);
     void Disconnect();
     void Stop();
 
