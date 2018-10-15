@@ -54,14 +54,6 @@ typedef void*           HANDLE;
 class QYStringOp
 {
 public:
-    QYStringOp()
-    {
-    };
-    ~QYStringOp()
-    {
-    };
-
-public:
     static QYString& Trim(QYString &s)
     {
         return TrimLeft(TrimRight(s));
@@ -81,5 +73,14 @@ public:
         return s;
     }
 };
+
+
+//±àÂë×ª»»
+bool GBK2UTF8(QYString &rGBKStr, QYString &rUTF8Str);
+bool UTF82GBK(QYString &rUTF8Str, QYString &rGBKStr);
+
+
+
+
 
 

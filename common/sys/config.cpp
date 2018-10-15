@@ -100,6 +100,7 @@ namespace qysys {
         //_WcharToString(szTempBuff, rValue);
         rValue = szTempBuff;
 #else
+        rValue = rDefaultValue;
         INI_CONFIG_MAP::iterator it = m_ConfigMap.find(rSection);
         if (it == m_ConfigMap.end()) {
             return QY_LIGHT_CONTROL_FAIL;
@@ -224,13 +225,14 @@ namespace qysys {
 
         while (fgets(data, 4096, pfile)) {
             strRow = data;
-            if (nSectionPos == std::string::npos && (nSectionPos = strRow.find(tmpSection)) == 0) { 
+            QYStringOp::Trim(strRow);
+            if (nSectionPos == std::string::npos && (nSectionPos = strRow.find(tmpSection)) != std::string::npos) {
                 fileContext += tmpSection;
                 fileContext += "\n";
-                nSectionPos = fileContext.length(); 
+                nSectionPos = fileContext.length();
                 nKeyPos = std::string::npos;
             }
-            else if (nKeyPos == std::string::npos && (nKeyPos = strRow.find(fileKey)) == 0) {
+            else if (nKeyPos == std::string::npos && (nKeyPos = strRow.find(fileKey)) != std::string::npos) {
                 //确保key相同，防止tmpContext是key的子串，也不能在tmpContext拼接=再查找，因为key = value，key后面的空格数不确定
                 QYString str = strRow;   
                 QYString key, value;
