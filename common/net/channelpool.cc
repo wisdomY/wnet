@@ -191,6 +191,7 @@ Channel* ChannelPool::GetTimeoutList(int64_t now)
         channel = channel->next_;
     }
 
+//将useList一分为二，超时的放入list中，未超时的部分继续放到useListHead_为头的指针中
     if (channel != useListHead_) {
         list = useListHead_;
         if (channel == NULL) {
