@@ -11,8 +11,8 @@
 #include <list>
 class IServerAdapter;
 
-class ServerBase {
-
+class ServerBase
+{
 public:
     ServerBase(evpp::EventLoop* loop,
                IPacketStreamer* streamer,
@@ -25,13 +25,12 @@ public:
 
     virtual void OnConnection(const evpp::TCPConnPtr& conn);
 
+public:
     void Start();
-
     void Stop();
 
 protected:
     void ConnectionCallback(const evpp::TCPConnPtr& conn);
-
     void OnMessage(const evpp::TCPConnPtr& conn, evpp::Buffer* buf);
 
 protected:
@@ -39,9 +38,11 @@ protected:
     IPacketStreamer *streamer_;
     IServerAdapter *adapter_;
     evpp::TCPServer tcp_server_;
+
 private:
     bool stopped_;
     std::mutex stopMutex_;
     std::condition_variable stopCond_;
 };
-    
+
+
