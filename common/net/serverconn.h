@@ -8,12 +8,10 @@
 #include "ipacketstreamer.h"
 #include "iserveradapter.h"
 
-class ServerConnection : public std::enable_shared_from_this<ServerConnection> {
-
+class ServerConnection : public std::enable_shared_from_this<ServerConnection>
+{
 public:
-    ServerConnection(evpp::TCPConn* conn_,
-                     IPacketStreamer* streamer,
-                     IServerAdapter* adapter);
+    ServerConnection(evpp::TCPConn* conn_, IPacketStreamer* streamer, IServerAdapter* adapter);
 
     virtual ~ServerConnection();
 
@@ -26,6 +24,8 @@ public:
     bool HandlePacket(evpp::Buffer *input, PacketHeader *header);
 
     void OnMessage(const evpp::TCPConnPtr& conn, evpp::Buffer* input);
+
+    std::string GetPeerIP();
 
 protected:
     evpp::TCPConn *conn_;
@@ -40,3 +40,5 @@ protected:
 };
     
 typedef std::shared_ptr<ServerConnection> ServerConnectionPtr;
+
+

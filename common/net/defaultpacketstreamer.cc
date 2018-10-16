@@ -5,20 +5,30 @@
 
 int DefaultPacketStreamer::nPacketFlag_ = QYNET_PACKET_FLAG;
 
-DefaultPacketStreamer::DefaultPacketStreamer() {}
+DefaultPacketStreamer::DefaultPacketStreamer()
+{
+}
 
-DefaultPacketStreamer::DefaultPacketStreamer(IPacketFactory *factory) : IPacketStreamer(factory) {}
+DefaultPacketStreamer::DefaultPacketStreamer(IPacketFactory *factory) : IPacketStreamer(factory)
+{
+}
 
-DefaultPacketStreamer::~DefaultPacketStreamer() {}
+DefaultPacketStreamer::~DefaultPacketStreamer()
+{
+}
 
-void DefaultPacketStreamer::SetPacketFactory(IPacketFactory *factory) {
+void DefaultPacketStreamer::SetPacketFactory(IPacketFactory *factory)
+{
     factory_ = factory;
 }
 
-bool DefaultPacketStreamer::GetPacketInfo(evpp::Buffer *input, PacketHeader *header, bool *broken) {
+bool DefaultPacketStreamer::GetPacketInfo(evpp::Buffer *input, PacketHeader *header, bool *broken)
+{
     if (existPacketHeader_) {
-        if (input->length() < (int)(4 * sizeof(int)))
+        if (input->length() < (int)(4 * sizeof(int))) {
             return false;
+        }
+
         int flag = input->ReadInt32();
         header->chid_ = input->ReadInt32();
         header->pcode_ = input->ReadInt32();
@@ -28,13 +38,15 @@ bool DefaultPacketStreamer::GetPacketInfo(evpp::Buffer *input, PacketHeader *hea
             LOG_ERROR << "stream error: "<< std::hex << flag << "<>" << DefaultPacketStreamer::nPacketFlag_ << ", dataLen:" << header->dataLen_;
             *broken = true;
         }
-    } else if (input->length() == 0) {
+    }
+    else if (input->length() == 0) {
         return false;
     }
     return true;
 }
 
-Packet *DefaultPacketStreamer::Decode(evpp::Buffer *input, PacketHeader *header) {
+Packet *DefaultPacketStreamer::Decode(evpp::Buffer *input, PacketHeader *header)
+{
     assert(factory_ != NULL);
     Packet *packet = factory_->CreatePacket(header->pcode_);
     if (packet != NULL) {
@@ -42,13 +54,15 @@ Packet *DefaultPacketStreamer::Decode(evpp::Buffer *input, PacketHeader *header)
             packet->Free();
             packet = NULL;
         }
-    } else {
+    }
+    else {
         input->Skip(header->dataLen_);
     }
     return packet;
 }
 
-bool DefaultPacketStreamer::Encode(Packet *packet, evpp::Buffer *output) {
+bool DefaultPacketStreamer::Encode(Packet *packet, evpp::Buffer *output)
+{
     PacketHeader *header = packet->GetPacketHeader();
 
     int oldLen = output->length();

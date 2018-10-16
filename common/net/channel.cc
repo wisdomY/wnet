@@ -2,10 +2,7 @@
 
 #include "channel.h"
 
-Channel::Channel()
-    : prev_(NULL)
-    , next_(NULL)
-    , expireTime_(0)
+Channel::Channel() : prev_(NULL), next_(NULL), expireTime_(0)
 {
 }
 

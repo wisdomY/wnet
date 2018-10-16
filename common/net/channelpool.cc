@@ -9,17 +9,14 @@ std::atomic<uint32_t> ChannelPool::globalChannelId_ = {1};
 std::atomic<int> ChannelPool::globalTotalCount_ = {0};
 
 ChannelPool::ChannelPool()
-    : freeListHead_(NULL)
-    , freeListTail_(NULL)
-    , useListHead_(NULL)
-    , useListTail_(NULL)
-    , maxUseCount_(0)
+    : freeListHead_(NULL), freeListTail_(NULL),
+    useListHead_(NULL), useListTail_(NULL), maxUseCount_(0)
 {
 }
 
 ChannelPool::~ChannelPool()
 {
-    for (std::list<Channel*>::iterator it = clusterList_.begin(); it != clusterList_.end(); it++) {
+    for (std::list<Channel*>::iterator it = clusterList_.begin(); it != clusterList_.end(); ++it) {
         delete[] *it;
     }
 }
@@ -43,12 +40,14 @@ Channel *ChannelPool::AllocChannel()
         freeListHead_->prev_ = NULL;
         freeListTail_->next_ = NULL;
         channel = &channelCluster[0];
-    } else {
+    }
+    else {
         channel = freeListHead_;
         freeListHead_ = freeListHead_->next_;
         if (freeListHead_ != NULL) {
             freeListHead_->prev_ = NULL;
-        } else {
+        }
+        else {
             freeListTail_ = NULL;
         }
     }
@@ -58,7 +57,8 @@ Channel *ChannelPool::AllocChannel()
     channel->expireTime_ = QYNET_MAX_TIME + 1;
     if (useListTail_ == NULL) {
         useListHead_ = channel;
-    } else {
+    }
+    else {
         useListTail_->next_ = channel;
     }
     useListTail_ = channel;
@@ -112,7 +112,8 @@ bool ChannelPool::FreeChannel(Channel *channel)
     channel->next_ = NULL;
     if (freeListTail_ == NULL) {
         freeListHead_ = channel;
-    } else {
+    }
+    else {
         freeListTail_->next_ = channel;
     }
     freeListTail_ = channel;
@@ -134,7 +135,8 @@ bool ChannelPool::AppendChannel(Channel *channel)
     channel->next_ = NULL;
     if (freeListTail_ == NULL) {
         freeListHead_ = channel;
-    } else {
+    }
+    else {
         freeListTail_->next_ = channel;
     }
     freeListTail_ = channel;
@@ -186,7 +188,9 @@ Channel* ChannelPool::GetTimeoutList(int64_t now)
 
     Channel *channel = useListHead_;
     while (channel != NULL) {
-        if (channel->expireTime_ >= now) break;//超时时间比现在时间长，说明未超时
+        if (channel->expireTime_ >= now) {
+            break;//超时时间比现在时间长，说明未超时, 在这之后的肯定都未超时
+        }
         useMap_.erase(channel->id_);
         channel = channel->next_;
     }
@@ -196,7 +200,8 @@ Channel* ChannelPool::GetTimeoutList(int64_t now)
         list = useListHead_;
         if (channel == NULL) {
             useListHead_ = useListTail_ = NULL;
-        } else {
+        }
+        else {
             if (channel->prev_ != NULL) {
                 channel->prev_->next_ = NULL;
             }
@@ -228,7 +233,8 @@ bool ChannelPool::AppendFreeList(Channel *addList) {
     addList->prev_ = freeListTail_;
     if (freeListTail_ == NULL) {
         freeListHead_ = addList;
-    } else {
+    }
+    else {
         freeListTail_->next_ = addList;
     }
     freeListTail_ = tail;
@@ -239,8 +245,12 @@ bool ChannelPool::AppendFreeList(Channel *addList) {
 
 void ChannelPool::SetExpireTime(Channel *channel, int64_t now)
 {
-    if (channel == NULL) return;
+    if (channel == NULL) {
+        return;
+    }
 
     std::lock_guard<std::mutex> _guard(mutex_);
     channel->expireTime_ = now;
 }
+
+

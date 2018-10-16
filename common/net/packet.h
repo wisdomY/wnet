@@ -6,14 +6,16 @@
 
 class Channel;
 
-class PacketHeader {
+class PacketHeader
+{
 public:
     uint32_t chid_;
     int pcode_;
     int dataLen_;
 };
 
-class Packet {
+class Packet
+{
     friend class PacketQueue;
 
 public:
@@ -92,3 +94,5 @@ protected:
     Channel *channel_;
     Packet *next_;
 };
+
+

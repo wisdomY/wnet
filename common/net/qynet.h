@@ -40,3 +40,5 @@ class IServerAdapter;
 #include "serverconn.h"
 #include "serverbase.h"
 #include "iserveradapter.h"
+
+

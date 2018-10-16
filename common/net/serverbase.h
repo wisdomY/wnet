@@ -23,12 +23,14 @@ public:
 
     virtual ~ServerBase();
 
+    virtual void OnConnection(const evpp::TCPConnPtr& conn);
+
     void Start();
 
     void Stop();
 
 protected:
-    void OnConnection(const evpp::TCPConnPtr& conn);
+    void ConnectionCallback(const evpp::TCPConnPtr& conn);
 
     void OnMessage(const evpp::TCPConnPtr& conn, evpp::Buffer* buf);
 

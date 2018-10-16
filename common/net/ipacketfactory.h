@@ -2,8 +2,10 @@
 
 class Packet;
 
-class IPacketFactory {
+class IPacketFactory
+{
 public:
     virtual ~IPacketFactory() {}
     virtual Packet* CreatePacket(int pcode) = 0;
 };
+

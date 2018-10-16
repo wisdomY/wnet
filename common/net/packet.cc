@@ -2,10 +2,7 @@
 #include "channel.h"
 #include "packet.h"
 
-Packet::Packet()
-    : next_(NULL)
-    , channel_(NULL)
-    , expireTime_(0)
+Packet::Packet() : next_(NULL), channel_(NULL), expireTime_(0)
 {
     memset(&packetHeader_, 0, sizeof(PacketHeader));
 }

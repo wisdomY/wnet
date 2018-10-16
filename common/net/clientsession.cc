@@ -8,20 +8,15 @@
 
 ClientSession::ClientSession(evpp::EventLoop *l, IPacketStreamer *s,
     const std::string& raddr, const std::string& n)
-    : loop_(l)
-    , tcp_client_(l, raddr, n)
-    , streamer_(s)
-    , gotHeader_(false)
+    : loop_(l), tcp_client_(l, raddr, n), streamer_(s), gotHeader_(false)
 {
     defaultPacketHandler_ = NULL;
     queueTimeout_ = 5000;
     queueLimit_ = 50;
     queueTotalSize_ = 0;
     client_conn_cb_ = DefaultClientConnectionCallback;
-    tcp_client_.SetConnectionCallback(
-        std::bind(&ClientSession::OnConnection, this, std::placeholders::_1));
-    tcp_client_.SetMessageCallback(
-	std::bind(&ClientSession::OnMessage, this, std::placeholders::_1, std::placeholders::_2));
+    tcp_client_.SetConnectionCallback(std::bind(&ClientSession::OnConnection, this, std::placeholders::_1));
+    tcp_client_.SetMessageCallback(std::bind(&ClientSession::OnMessage, this, std::placeholders::_1, std::placeholders::_2));
     memset(&packetHeader_, 0, sizeof(packetHeader_));
 }
 
@@ -40,14 +35,11 @@ void ClientSession::Disconnect()
     CheckTimeout(QYNET_MAX_TIME);
 }
 
-void ClientSession::Stop() {
+void ClientSession::Stop()
+{
     if (loop_ != NULL) {
         loop_->Stop();
     }
-}
-
-void ClientSession::Connect() {
-    tcp_client_.Connect();
 }
 
 void ClientSession::Connect(const ClientConnectionCallback& cb) {
@@ -69,7 +61,8 @@ void ClientSession::OnConnection(const evpp::TCPConnPtr& conn) {
         connPtr_ = conn;
         PostOutputQueue();
         client_conn_cb_(this);
-    } else {
+    }
+    else {
         DLOG_TRACE << "Tcp client session destroyed id:" << conn->id();
         client_conn_cb_(this);//断连也需要调用回调，回调到业务层处理
     }
@@ -86,7 +79,9 @@ void ClientSession::OnMessage(const evpp::TCPConnPtr& /*conn*/, evpp::Buffer* in
     while (input->length() > 0) {
         if (!gotHeader_) {
             gotHeader_ = streamer_->GetPacketInfo(input, &packetHeader_, &broken);
-            if (broken) break;
+            if (broken) {
+                break;
+            }
         }
         if (gotHeader_ && static_cast<int>(input->length()) >= packetHeader_.dataLen_) {
             HandlePacket(input, &packetHeader_);
@@ -167,14 +162,16 @@ bool ClientSession::PostPacket(Packet *packet, IPacketHandler *packetHandler, vo
         channel->SetHandler(packetHandler);
         channel->SetArgs(args);
         packet->SetChannel(channel);
-    } else {
+    }
+    else {
         packet->SetChannel(NULL);
     }
 
     mutex_.lock();
     if (!IsConnected()) {//TCP未连接的时候才将消息放到队列中，重连的时候保证消息不丢失，已连接的时候会直接发送出去
         outputQueue_.Push(packet);
-    } else {
+    }
+    else {
         streamer_->Encode(packet, &output_);
         channelPool_.SetExpireTime(packet->GetChannel(), packet->GetExpireTime());
         packet->Free();
@@ -232,7 +229,8 @@ bool ClientSession::HandlePacket(evpp::Buffer *input, PacketHeader *header)
     if (packet == NULL) {
         LOG_WARN << "Unable to decode packet";
         packet = &ControlPacket::BadPacket;
-    } else {
+    }
+    else {
         packet->SetPacketHeader(header);
     }
 

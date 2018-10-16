@@ -1,10 +1,7 @@
 #include "evpp/logging.h"
 #include "packetqueue.h"
 
-PacketQueue::PacketQueue()
-    : head_(NULL)
-    , tail_(NULL)
-    , size_(0)
+PacketQueue::PacketQueue() : head_(NULL), tail_(NULL), size_(0)
 {
 }
 
@@ -128,4 +125,5 @@ Packet *PacketQueue::GetTimeoutList(int64_t now)
 Packet *PacketQueue::GetPacketList() {
     return head_;
 }
+
 

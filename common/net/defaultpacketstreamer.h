@@ -6,8 +6,8 @@
 #include "ipacketfactory.h"
 #include "ipacketstreamer.h"
 
-class DefaultPacketStreamer : public IPacketStreamer {
-
+class DefaultPacketStreamer : public IPacketStreamer
+{
 public:
     DefaultPacketStreamer();
 
@@ -28,3 +28,4 @@ public:
 public:
     static int nPacketFlag_;
 };
+

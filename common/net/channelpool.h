@@ -9,8 +9,8 @@
 
 class Channel;
 
-class ChannelPool {
-
+class ChannelPool
+{
 public:
     ChannelPool();
 
@@ -27,7 +27,8 @@ public:
 
     bool AppendFreeList(Channel *addList);
 
-    int GetUseListCount() {
+    int GetUseListCount()
+    {
         return static_cast<int32_t>(useMap_.size());
     }
 
@@ -48,3 +49,5 @@ private:
     static std::atomic<uint32_t> globalChannelId_;
     static std::atomic<int> globalTotalCount_;
 };
+
+

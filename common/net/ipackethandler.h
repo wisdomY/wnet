@@ -10,6 +10,10 @@ public:
         FREE_CHANNEL  = 2
     };
 
-    virtual ~IPacketHandler() {}
+    virtual ~IPacketHandler()
+    {
+    }
+    
     virtual HPRetCode HandlePacket(Packet *packet, void *args) = 0;
 };
+

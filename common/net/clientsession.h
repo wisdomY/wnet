@@ -36,7 +36,6 @@ public:
 
     virtual bool HandlePacket(evpp::Buffer *input, PacketHeader *header);
 
-    void Connect();
     void Connect(const ClientConnectionCallback& cb);
     void SetAutoReconnect(evpp::Duration duration);
     void Disconnect();

@@ -2,15 +2,17 @@
 
 #include "evpp/buffer.h"
 
-class IPacketStreamer {
-
+class IPacketStreamer
+{
 public:
-    IPacketStreamer() {
+    IPacketStreamer()
+    {
         factory_ = NULL;
         existPacketHeader_ = true;
     }
 
-    IPacketStreamer(IPacketFactory* factory) {
+    IPacketStreamer(IPacketFactory* factory)
+    {
         factory_ = factory;
         existPacketHeader_ = true;
     }
@@ -23,7 +25,8 @@ public:
 
     virtual bool Encode(Packet *packet, evpp::Buffer *output) = 0;
 
-    bool ExistPacketHeader() {
+    bool ExistPacketHeader()
+    {
         return existPacketHeader_;
     }
 
@@ -31,3 +34,4 @@ protected:
     IPacketFactory *factory_;
     bool existPacketHeader_;
 };
+

@@ -17,28 +17,40 @@ public:
     static ControlPacket DisconnPacket;
 
 public:
-    ControlPacket(int c) : command_(c) {}
+    ControlPacket(int c) : command_(c)
+    {
+    }
 
-    bool IsRegularPacket() {
+    bool IsRegularPacket()
+    {
         return false;
     }
 
-    void Free() {}
+    void Free()
+    {
+    }
 
-    void CountDataLen() {}
+    void CountDataLen()
+    {
+    }
 
-    bool Encode(evpp::Buffer*) {
+    bool Encode(evpp::Buffer*)
+    {
         return false;
     }
 
-    bool Decode(evpp::Buffer*, PacketHeader*) {
+    bool Decode(evpp::Buffer*, PacketHeader*)
+    {
         return false;
     }
 
-    int GetCommand() {
+    int GetCommand()
+    {
         return command_;
     }
 
 private:
     int command_;
 };
+
+
